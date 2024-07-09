@@ -25,6 +25,5 @@ namespace library.Data
             return results;
         }
 
-        // Métodos para executar comandos, inserir, atualizar, etc.
     }
 }

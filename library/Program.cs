@@ -15,6 +15,11 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<ILivroService, LivroService>();
 builder.Services.AddTransient<DatabaseAccess>();
 
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.PropertyNamingPolicy = null;
+});
+
 
 var app = builder.Build();
 
@@ -34,6 +39,8 @@ app.UseAuthorization();
 app.MapControllers();
 
 //app.MapFallbackToFile("index.html");
+
+app.UseDefaultFiles();
 
 app.Run();
 

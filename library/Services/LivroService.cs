@@ -20,7 +20,7 @@ namespace library.Services
 
     public async Task<List<LivroDto>> GetAllAsync()
     {
-        var sql = "SELECT Codigo, Titulo, Lancamento FROM Livro"; // Ajuste conforme a estrutura de LivroDto
+        var sql = "SELECT Codigo, Titulo, Lancamento FROM Livro";
         List<LivroDto> livros = await _databaseAccess.QueryAsync<LivroDto>(sql, reader =>
             new LivroDto
             {

@@ -1,53 +1,25 @@
-﻿using library.Data;
-using library.Models;
-using library.Models.Dto;
+﻿using library.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Data.SqlClient;
+using library.Services;
+using library.Services.Interfaces;
+using library.Models.Dto;
 
 [ApiController]
 [Route("api/[controller]")]
 public class LivrosController : ControllerBase
 {
-    private readonly DatabaseAccess _databaseAccess;
+    private readonly ILivroService _livroService;
 
-    public LivrosController(DatabaseAccess databaseAccess)
+    public LivrosController(ILivroService livroService)
     {
-        _databaseAccess = databaseAccess;
+        _livroService = livroService;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetLivros()
+    public async Task<ActionResult<IEnumerable<LivroDto>>> GetLivros()
     {
-        var sql = "SELECT * FROM Livro";
-        var livros = await _databaseAccess.QueryAsync<LivroDto>(sql, reader =>
-            new LivroDto
-            {
-                Codigo = reader.GetInt32(reader.GetOrdinal("Codigo")),
-                Titulo = reader.GetString(reader.GetOrdinal("Titulo")),
-                Autor = reader.GetString(reader.GetOrdinal("Autor")),
-                Lancamento = reader.GetDateTime(reader.GetOrdinal("Lancamento"))
-            });
-
+        var livros = await _livroService.GetAllAsync();
         return Ok(livros);
-    }
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetLivro(int id)
-    {
-        var sql = $"SELECT * FROM Livro WHERE Codigo = @id";
-        var livro = await _databaseAccess.QueryAsync<LivroDto>(sql, reader =>
-            new LivroDto
-            {
-                Codigo = reader.GetInt32(reader.GetOrdinal("Codigo")),
-                Titulo = reader.GetString(reader.GetOrdinal("Titulo")),
-                Autor = reader.GetString(reader.GetOrdinal("Autor")),
-                Lancamento = reader.GetDateTime(reader.GetOrdinal("Lancamento"))
-            });
-
-        if (livro.Any())
-            return Ok(livro.First());
-        else
-            return NotFound();
     }
 
 }

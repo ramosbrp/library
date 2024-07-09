@@ -1,4 +1,6 @@
 using library.Data;
+using library.Services.Interfaces;
+using library.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
+
+
+// Adiciona serviços ao container.
+builder.Services.AddScoped<ILivroService, LivroService>();
 builder.Services.AddTransient<DatabaseAccess>();
 
 
@@ -27,7 +33,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapFallbackToFile("index.html");
+//app.MapFallbackToFile("index.html");
 
 app.Run();
 

@@ -1,4 +1,6 @@
 ﻿using library.Data;
+using library.Models;
+using library.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
 using System.Data.SqlClient;
 
@@ -17,8 +19,8 @@ public class LivrosController : ControllerBase
     public async Task<IActionResult> GetLivros()
     {
         var sql = "SELECT * FROM Livro";
-        var livros = await _databaseAccess.QueryAsync<Livro>(sql, reader =>
-            new Livro
+        var livros = await _databaseAccess.QueryAsync<LivroDto>(sql, reader =>
+            new LivroDto
             {
                 Codigo = reader.GetInt32(reader.GetOrdinal("Codigo")),
                 Titulo = reader.GetString(reader.GetOrdinal("Titulo")),
@@ -33,8 +35,8 @@ public class LivrosController : ControllerBase
     public async Task<IActionResult> GetLivro(int id)
     {
         var sql = $"SELECT * FROM Livro WHERE Codigo = @id";
-        var livro = await _databaseAccess.QueryAsync<Livro>(sql, reader =>
-            new Livro
+        var livro = await _databaseAccess.QueryAsync<LivroDto>(sql, reader =>
+            new LivroDto
             {
                 Codigo = reader.GetInt32(reader.GetOrdinal("Codigo")),
                 Titulo = reader.GetString(reader.GetOrdinal("Titulo")),
@@ -48,12 +50,4 @@ public class LivrosController : ControllerBase
             return NotFound();
     }
 
-}
-
-public class Livro
-{
-    public int Codigo { get; set; }
-    public string Titulo { get; set; }
-    public string Autor { get; set; }
-    public DateTime Lancamento { get; set; }
 }

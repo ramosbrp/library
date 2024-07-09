@@ -1,0 +1,33 @@
+## .NET Core
+bin/
+obj/
+*.user
+*.suo
+*.userprefs
+
+
+## Angular/Node
+/node_modules
+/dist
+/.angular-build-info.json
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+## IDEs (Visual Studio, VS Code, etc.)
+.vs/
+.vscode/
+*.rider/
+.idea/
+
+## OS
+.DS_Store
+Thumbs.db
+
+# NuGet
+packages/
+*.mdf
+*.ldf
+appsettings.json
+/git-filter-repo

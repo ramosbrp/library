@@ -7,29 +7,43 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace library.Services
 {
-   
 
-   public class LivroService : ILivroService
-{
-    private readonly DatabaseAccess _databaseAccess;
 
-    public LivroService(DatabaseAccess databaseAccess)
+    public class LivroService : ILivroService
     {
-        _databaseAccess = databaseAccess;
-    }
+        private readonly DatabaseAccess _databaseAccess;
 
-    public async Task<List<LivroDto>> GetAllAsync()
-    {
-        var sql = "SELECT Codigo, Titulo, Lancamento FROM Livro";
-        List<LivroDto> livros = await _databaseAccess.QueryAsync<LivroDto>(sql, reader =>
-            new LivroDto
+        public LivroService(DatabaseAccess databaseAccess)
+        {
+            _databaseAccess = databaseAccess;
+        }
+
+
+
+        public async Task<List<LivroDto>> GetAllAsync()
+        {
+            return await _databaseAccess.GetAllLivrosAsync();
+        }
+
+        public async Task<LivroDto> AddAsync(LivroDto livroDto)
+        {
+            var livro = new Livro
             {
-                Codigo = reader.GetInt32(reader.GetOrdinal("Codigo")),
-                Titulo = reader.GetString(reader.GetOrdinal("Titulo")),
-                Lancamento = reader.GetDateTime(reader.GetOrdinal("Lancamento"))
-            });
+                Titulo = livroDto.Titulo,
+                Autor = livroDto.Autor,
+                Lancamento = livroDto.Lancamento
+            };
 
-        return livros;
+
+            var id = await _databaseAccess.AddLivroAsync(livro);
+            livro.Codigo = id;
+
+            return new LivroDto
+            {
+                Titulo = livro.Titulo,
+                Autor = livro.Autor,
+                Lancamento = livro.Lancamento
+            };
+        }
     }
-}
 }

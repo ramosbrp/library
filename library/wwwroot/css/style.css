@@ -1,6 +1,19 @@
-﻿namespace library.wwwroot.css
-{
-    public class style
-    {
-    }
+﻿#formContainer {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f4f4f4;
+    border-radius: 5px;
+}
+
+#addBookForm input, #addBookForm button {
+    padding: 8px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#addBookForm button {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
 }

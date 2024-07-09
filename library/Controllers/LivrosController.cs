@@ -33,4 +33,23 @@ public class LivrosController : ControllerBase
         }
     }
 
+    [HttpPost]
+    public async Task<ActionResult<IEnumerable<LivroDto>>> PostLivro([FromBody] LivroDto livroDto)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var livro = await _livroService.AddAsync(livroDto);
+            return CreatedAtAction(nameof(PostLivro), new ApiResponse<LivroDto>(true, "Livro cadastrado com sucesso", livro));
+
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new ApiResponse<string>(false, "Erro ao cadastrar livros", ex.Message));
+        }
+    }
+
 }

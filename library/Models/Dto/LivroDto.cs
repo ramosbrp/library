@@ -7,5 +7,14 @@
 
         public string Autor { get; set; }
         public DateTime Lancamento { get; set; }
+        public List<Tag> Tags { get; set; }
+
+        public LivroDto() {
+            Codigo = 0;
+            Titulo = string.Empty;
+            Autor = string.Empty;
+            Lancamento = DateTime.MinValue;
+            Tags = new List<Tag>();
+        }
     }
 }

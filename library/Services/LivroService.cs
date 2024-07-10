@@ -45,5 +45,46 @@ namespace library.Services
                 Lancamento = livro.Lancamento
             };
         }
+
+        public async Task<List<LivroDto>> FilterAsync(int? year, int? month)
+        {
+            return await _databaseAccess.FilterAsync(year, month);
+        }
+
+        public async Task<LivroDto> Detail(int codigo)
+        {
+            return await _databaseAccess.Detail(codigo);
+        }
+
+        public async Task<LivroDto> UpdateAsync(LivroDto livroDto)
+        {
+            var livro = new Livro
+            {
+                Titulo = livroDto.Titulo,
+                Autor = livroDto.Autor,
+                Lancamento = livroDto.Lancamento
+            };
+
+            List<Tag> tags = new List<Tag>();
+            tags = livroDto.Tags;
+
+            //foreach (var item in livroDto.Tags)
+            //{
+            //    tags.Add(item);
+            //}
+
+
+            var id = await _databaseAccess.UpdateAsync(livroDto);
+
+            livro.Codigo = id;
+
+            return new LivroDto {
+                Codigo = id,
+                Titulo = livro.Titulo,
+                Autor = livro.Autor,
+                Lancamento= livro.Lancamento,
+                Tags = tags
+            };
+        }
     }
 }

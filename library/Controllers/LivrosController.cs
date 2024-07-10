@@ -52,4 +52,51 @@ public class LivrosController : ControllerBase
         }
     }
 
+    [HttpGet("filter")]
+    public async Task<ActionResult<IEnumerable<LivroDto>>> Filter([FromQuery] int? year, [FromQuery] int? month)
+    {
+        try
+        {
+            var livros = await _livroService.FilterAsync(year, month);
+
+            return CreatedAtAction(nameof(Filter), new ApiResponse<List<LivroDto>>(true, "Livros encontrados", livros));
+
+        }
+        catch (Exception ex)
+        {
+
+            return StatusCode(500, new ApiResponse<string>(false, "Erro ao buscar livros", ex.Message));
+        }
+    }
+
+    [HttpGet("detail")]
+    public async Task<ActionResult<IEnumerable<LivroDto>>> Detail([FromQuery] int codigo)
+    {
+        try
+        {
+            var livro = await _livroService.Detail(codigo);
+            return CreatedAtAction(nameof(Detail), new ApiResponse<LivroDto>(true, "Livro editado com sucesso.", livro));
+        }
+        catch (Exception ex)
+        {
+
+            throw ex;
+        }
+    }
+
+    [HttpPost("edit")]
+    public async Task<ActionResult<IEnumerable<LivroDto>>> Edit([FromBody] LivroDto livroDto)
+    {
+        try
+        {
+
+            var livro = await _livroService.UpdateAsync(livroDto);
+            return CreatedAtAction(nameof(Detail), new ApiResponse<LivroDto>(true, "Livro editado com sucesso.", livro));
+        }
+        catch (Exception ex)
+        {
+
+            throw ex;
+        }
+    }
 }

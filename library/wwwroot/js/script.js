@@ -68,6 +68,11 @@ const buscarLivros = async () => {
 document.getElementById('addBookForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    var bookTagsInput = document.getElementById('bookTagsAdd');
+
+    const tagsInput = bookTagsInput.value;
+    const tagsArray = tagsInput.split(',').map(tag => ({ Descricao: tag.trim() }));
+
     const livroData = {
         titulo: document.getElementById('titulo').value,
         autor: document.getElementById('autor').value,
@@ -76,8 +81,11 @@ document.getElementById('addBookForm').addEventListener('submit', async (e) => {
         formato: document.getElementById('isDigital').checked ? document.getElementById('formato').value : null,
         isImpressed: document.getElementById('isImpressed').checked,
         peso: document.getElementById('isImpressed').checked ? parseFloat(document.getElementById('peso').value) : null,
-        tipoEncadernacaoID: document.getElementById('tipoEncadernacao').value
+        tipoEncadernacaoID: document.getElementById('tipoEncadernacao').value,
+        Tags: tagsArray
     };
+
+    console.log(livroData);
 
     try {
         const response = await fetch('/api/livros', {

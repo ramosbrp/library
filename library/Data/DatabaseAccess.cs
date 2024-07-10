@@ -68,6 +68,9 @@ namespace library.Data
                     command.Parameters.AddWithValue("@Peso", livroDto.IsImpressed ? livroDto.Peso : DBNull.Value);
                     command.Parameters.AddWithValue("@TipoEncadernacaoID", livroDto.IsImpressed && livroDto.TipoEncadernacaoID.HasValue ? livroDto.TipoEncadernacaoID.Value : DBNull.Value);
 
+                    var tagsAsString = string.Join(",", livroDto.Tags.Select(t => t.Descricao));
+                    command.Parameters.AddWithValue("@Tags", tagsAsString);
+
                     connection.Open();
                     var result = await command.ExecuteScalarAsync();
                     return Convert.ToInt32(result);

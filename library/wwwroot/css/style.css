@@ -1,68 +1,80 @@
-﻿#formContainer {
-    margin-bottom: 20px;
-    padding: 10px;
+﻿/* Estilos base */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
     background-color: #f4f4f4;
-    border-radius: 5px;
 }
 
-#addBookForm input, #addBookForm button {
-    padding: 8px;
-    margin: 5px;
+
+h1, h2 {
+    color: #333;
+}
+
+/* Formulários e botões */
+input, select, button {
+    max-width: 400px;
+    padding: 10px;
+    margin-top: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
 
-#addBookForm button {
-    background-color: #4CAF50;
+button {
+    background-color: #5C67F2;
     color: white;
+    border: none;
     cursor: pointer;
 }
 
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
+    button:hover {
+        background-color: #4a54f1;
+        transition: background-color 0.3s;
+    }
+
+/* Layout do formulário */
+#formContainer, #filterContainer {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
 }
 
-.modal-content {
+/* Estilo da tabela */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ccc;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+/* Estilos de Modal */
+.modal-content, .content-deletar {
     background-color: #fefefe;
-    margin: 15% auto;
+    margin: 10% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 60%;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
 }
 
-
-
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-    .close:hover,
-    .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-    }
-
-
-#modal-container-fields{
-    display: flex;
-    flex-flow: column;
-    justify-content: center;
-    align-items: start;
-}
-
-.modal-deletar {
+.modal, .modal-deletar {
     display: none;
     position: fixed;
     z-index: 1;
@@ -74,21 +86,14 @@
     background-color: rgba(0,0,0,0.4);
 }
 
-.content-deletar {
-    width: 80%;
-    max-width: 500px;
-}
-
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-    .close:hover,
-    .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
+/* Media Queries para Responsividade */
+@media (max-width: 768px) {
+    input, select, button {
+        width: 100%;
     }
+
+    .modal-content, .content-deletar {
+        width: 90%;
+        margin: 20% auto;
+    }
+}

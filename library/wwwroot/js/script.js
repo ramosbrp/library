@@ -71,7 +71,12 @@ document.getElementById('addBookForm').addEventListener('submit', async (e) => {
     const livroData = {
         titulo: document.getElementById('titulo').value,
         autor: document.getElementById('autor').value,
-        lancamento: document.getElementById('lancamento').value
+        lancamento: document.getElementById('lancamento').value,
+        isDigital: document.getElementById('isDigital').checked,
+        formato: document.getElementById('isDigital').checked ? document.getElementById('formato').value : null,
+        isImpressed: document.getElementById('isImpressed').checked,
+        peso: document.getElementById('isImpressed').checked ? parseFloat(document.getElementById('peso').value) : null,
+        tipoEncadernacaoID: document.getElementById('tipoEncadernacao').value
     };
 
     try {
@@ -88,9 +93,8 @@ document.getElementById('addBookForm').addEventListener('submit', async (e) => {
 
         if (data.Success) {
             const book = data.Data;
-            console.log(book);
 
-            carregarLivros();
+            buscarLivros();
         }
 
 
@@ -134,7 +138,6 @@ const editarLivro = async (codigo) => {
                 const tagsInput = bookTagsInput.value;
                 const tagsArray = tagsInput.split(',').map(tag => ({ Descricao: tag.trim() }));
 
-                console.log(tagsArray);  
 
                 const livroData = {
                     codigo: codigo,
@@ -151,14 +154,12 @@ const editarLivro = async (codigo) => {
                     },
                     body: JSON.stringify(livroData)
                 });
-                console.log(response.text());
                 if (!response.ok) throw new Error("Error");
 
                 const result = response.json();
 
                 if (resul.Success) { }
 
-                console.log('Editar livro com código: ', book.Codigo);
 
             });
         }
@@ -171,9 +172,47 @@ const editarLivro = async (codigo) => {
 
 
 //Deletar
-const deletarLivro = (codigo) => {
-    console.log('Deletando livro com código: ', codigo);
+function deletarLivro(bookId) {
+    const modal = document.getElementById('deleteModal');
+    const span = document.getElementsByClassName("close")[0];
+    const deleteConfirm = document.getElementById('deleteConfirm');
+
+    // Quando o usuário clica no botão de deletar
+    deleteConfirm.onclick = function () {
+        modal.style.display = "none";
+        deleteBook(bookId); // Chama a função que deleta o livro
+    };
+
+    // Quando o usuário clica em cancelar ou no (x)
+    span.onclick = function () {
+        modal.style.display = "none";
+    };
+    document.getElementById('deleteCancel').onclick = function () {
+        modal.style.display = "none";
+    };
+
+    // Mostra a modal
+    modal.style.display = "block";
 }
+
+// Função para deletar o livro
+function deleteBook(bookId) {
+    fetch(`/api/livros/${bookId}`, {
+        method: 'DELETE'
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Falha ao deletar o livro');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data.message);
+            buscarLivros();
+        })
+        .catch(error => console.error('Erro:', error));
+}
+
 
 function formatarData(dataISO) {
     const data = new Date(dataISO);
@@ -218,3 +257,11 @@ document.getElementById('filterForm').addEventListener('submit', async (e) => {
 document.querySelector('.close').onclick = function () {
     document.getElementById('bookDetailModal').style.display = 'none';
 };
+
+document.getElementById('isDigital').addEventListener('change', function () {
+    document.getElementById('digitalFields').style.display = this.checked ? 'block' : 'none';
+});
+
+document.getElementById('isImpressed').addEventListener('change', function () {
+    document.getElementById('impressedFields').style.display = this.checked ? 'block' : 'none';
+});

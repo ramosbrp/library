@@ -10,5 +10,6 @@ namespace library.Services.Interfaces
         Task<List<LivroDto>> FilterAsync(int? year, int? month);
         Task<LivroDto> Detail(int codigo);
         Task<LivroDto> UpdateAsync(LivroDto livroDto);
+        Task<bool> DeleteLivroAsync(int codigo);
     }
 }

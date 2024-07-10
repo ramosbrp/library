@@ -18,9 +18,33 @@
             <input type="text" id="titulo" name="titulo" placeholder="Título do livro" required>
             <input type="text" id="autor" name="autor" placeholder="Autor" required>
             <input type="date" id="lancamento" name="lancamento" required>
+
+            <div>
+                <input type="checkbox" id="isDigital" name="isDigital">
+                <label for="isDigital">Digital</label>
+                <div id="digitalFields" style="display:none;">
+                    <input type="text" id="formato" name="formato" placeholder="Formato (ex: PDF, ePub)" required>
+                </div>
+            </div>
+
+            <div>
+                <input type="checkbox" id="isImpressed" name="isImpressed">
+                <label for="isImpressed">Impresso</label>
+                <div id="impressedFields" style="display:none;">
+                    <input type="text" id="peso" name="peso" placeholder="Peso (em kg)" required>
+                    <select id="tipoEncadernacao" name="tipoEncadernacao">
+                        <option value="1">Capa dura</option>
+                        <option value="2">Brochura</option>
+
+                    </select>
+                </div>
+            </div>
+
             <button type="submit">Adicionar Livro</button>
         </form>
     </div>
+
+
 
     <!--Filtro-->
     <div id="filterContainer">
@@ -63,9 +87,9 @@
         </tbody>
     </table>
 
-    <!--Modal-->
+    <!--Modal detalhes-->
     <div id="bookDetailModal" class="modal">
-        <form id="modal-edit-form" >
+        <form id="modal-edit-form">
 
             <div class="modal-content">
                 <span class="close">&times;</span>
@@ -81,12 +105,22 @@
                     <input type="text" id="bookRelease">
 
                     <label for="bookTags">Tags</label>
-                    <input type="text" id="bookTags"  placeholder="Tag1, Tag2, Tag3" />
+                    <input type="text" id="bookTags" placeholder="Tag1, Tag2, Tag3" />
 
                     <button type="submit">Confirmar</button>
                 </div>
             </div>
         </form>
+    </div>
+
+    <!-- Modal de Confirmação para Deletar -->
+    <div id="deleteModal" class="modal-deletar">
+        <div class="modal-content content-deletar">
+            <span class="close">&times;</span>
+            <p>Tem certeza de que deseja deletar este livro?</p>
+            <button id="deleteConfirm">Deletar</button>
+            <button id="deleteCancel">Cancelar</button>
+        </div>
     </div>
 
 

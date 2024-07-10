@@ -99,4 +99,25 @@ public class LivrosController : ControllerBase
             throw ex;
         }
     }
+
+    // Método DELETE: api/livros/5
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteLivro(int id)
+    {
+        try
+        {
+            var success = await _livroService.DeleteLivroAsync(id);
+            if (!success)
+            {
+                return NotFound(new { Message = "Livro não encontrado." });
+            }
+
+            return Ok(new { Message = "Livro deletado com sucesso." });
+        }
+        catch (Exception ex)
+        {
+            // Log the exception details here using your preferred logging approach
+            return StatusCode(500, new { Message = $"Erro interno do servidor: {ex.Message}" });
+        }
+    }
 }

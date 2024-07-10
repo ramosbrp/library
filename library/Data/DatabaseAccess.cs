@@ -51,17 +51,22 @@ namespace library.Data
         }
 
 
-        public async Task<int> AddLivroAsync(Livro livro)
+        public async Task<int> AddLivroAsync(LivroDto livroDto)
         {
             try
             {
-                var sql = "INSERT INTO Livro (Titulo, Autor, Lancamento) values (@Titulo, @Autor, @Lancamento); SELECT CAST(SCOPE_IDENTITY() AS int);";
                 var connection = new SqlConnection(_connectionString);
-                using (var command = new SqlCommand(sql, connection))
+                using (var command = new SqlCommand("AddLivro", connection))
                 {
-                    command.Parameters.AddWithValue("@Titulo", livro.Titulo);
-                    command.Parameters.AddWithValue("@Autor", livro.Autor);
-                    command.Parameters.AddWithValue("@Lancamento", livro.Lancamento);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@Titulo", livroDto.Titulo);
+                    command.Parameters.AddWithValue("@Autor", livroDto.Autor);
+                    command.Parameters.AddWithValue("@Lancamento", livroDto.Lancamento);
+                    command.Parameters.AddWithValue("@IsDigital", livroDto.IsDigital);
+                    command.Parameters.AddWithValue("@Formato", livroDto.IsDigital ? livroDto.Formato : DBNull.Value);
+                    command.Parameters.AddWithValue("@IsImpressed", livroDto.IsImpressed);
+                    command.Parameters.AddWithValue("@Peso", livroDto.IsImpressed ? livroDto.Peso : DBNull.Value);
+                    command.Parameters.AddWithValue("@TipoEncadernacaoID", livroDto.IsImpressed && livroDto.TipoEncadernacaoID.HasValue ? livroDto.TipoEncadernacaoID.Value : DBNull.Value);
 
                     connection.Open();
                     var result = await command.ExecuteScalarAsync();
@@ -72,7 +77,6 @@ namespace library.Data
             {
                 throw ex;
             }
-
         }
 
         public async Task<List<LivroDto>> FilterAsync(int? year, int? month)
@@ -194,6 +198,38 @@ namespace library.Data
             catch (Exception ex)
             {
                 throw ex; // Idealmente, você deve tratar essa exceção de forma mais apropriada ou logar o erro.
+            }
+        }
+
+        public async Task<bool> DeleteLivroAsync(int livroId)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                using (var command = new SqlCommand("DeleteLivro", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@LivroId", livroId);
+
+                    await connection.OpenAsync();
+
+                    try
+                    {
+                        var result = await command.ExecuteScalarAsync();
+                        if (result != null && result.ToString().Contains("sucesso"))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false; // Livro não encontrado ou erro na deleção
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // Log exception here using your preferred logging framework
+                        throw new Exception("Error deleting the book: " + ex.Message);
+                    }
+                }
             }
         }
 

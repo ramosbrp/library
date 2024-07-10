@@ -27,22 +27,16 @@ namespace library.Services
 
         public async Task<LivroDto> AddAsync(LivroDto livroDto)
         {
-            var livro = new Livro
+            
+
+            var id = await _databaseAccess.AddLivroAsync(livroDto);
+            livroDto.Codigo = id;
+
+            return new LivroDto
             {
                 Titulo = livroDto.Titulo,
                 Autor = livroDto.Autor,
                 Lancamento = livroDto.Lancamento
-            };
-
-
-            var id = await _databaseAccess.AddLivroAsync(livro);
-            livro.Codigo = id;
-
-            return new LivroDto
-            {
-                Titulo = livro.Titulo,
-                Autor = livro.Autor,
-                Lancamento = livro.Lancamento
             };
         }
 
@@ -85,6 +79,11 @@ namespace library.Services
                 Lancamento= livro.Lancamento,
                 Tags = tags
             };
+        }
+
+        public async Task<bool> DeleteLivroAsync(int codigo)
+        {
+            return await _databaseAccess.DeleteLivroAsync(codigo);
         }
     }
 }
